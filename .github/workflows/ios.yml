@@ -5,15 +5,25 @@ on:
     branches: [ "main" ]
   
     
-workflow_dispatch:
+  workflow_dispatch:
 jobs:
   build:
     name: build
     runs-on: macos-latest
-
+    name: Install dependencies
+    run: npm install
+    name: Install CocoaPods
+    run: | cd ios pod install cd ..
+    name: Build Archive
+    run: | cd ios xcodebuild -workspace Suncairn.xcworkspace -scheme Suncairn -configuration Release -archivePath $PWD/build/Suncairn.xcarchive archive cd ..
+    name: Export IPA
+    run: | cd ios xcodebuild -exportArchive -archivePath $PWD/build/Suncairn.xcarchive -exportOptionsPlist exportOptions.plist -exportPath $PWD/build cd ..
+    name: Upload to App Store
+    run: xcrun altool --upload-app --type ios --file ./ios/build/Suncairn.ipa --apiKey ${{ secrets.API_KEY }} --apiIssuer ${{ secrets.API_ISSUER }}
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v3
+        
       - name: Set Default Scheme
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
