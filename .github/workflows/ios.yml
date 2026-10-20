@@ -5,8 +5,8 @@ on:
     branches: [ "main" ]
     
   workflow_dispatch:
-jobs:
-  build:
+    jobs:
+      build:
     runs-on: macos-latest
   steps:
     -name: Checkout
@@ -16,14 +16,14 @@ jobs:
     
   with:
   node-version: '18'
-    -name: Install dependencies
-  run: npm install
+-name: Install dependencies
+run: npm install
     -name: Install CocoaPods
   run: | cd ios pod install cd ..
     -name: Build Archive
-  run: | cd ios xcodebuild -workspace Suncairn.xcworkspace -scheme Suncairn -configuration Release -archivePath $PWD/build/Suncairn.xcarchive archive cd ..
+run: | cd ios xcodebuild -workspace Suncairn.xcworkspace -scheme Suncairn -configuration Release -archivePath $PWD/build/Suncairn.xcarchive archive cd ..
     -name: Export IPA
-  run: | cd ios xcodebuild -exportArchive -archivePath $PWD/build/Suncairn.xcarchive -exportOptionsPlist exportOptions.plist -exportPath $PWD/build cd ..
+run: | cd ios xcodebuild -exportArchive -archivePath $PWD/build/Suncairn.xcarchive -exportOptionsPlist exportOptions.plist -exportPath $PWD/build cd ..
     -name: Upload to App Store
-  run: xcrun altool --upload-app --type ios --file ./ios/build/Suncairn.ipa --apiKey ${{ secrets.API_KEY }} --apiIssuer ${{ secrets.API_ISSUER }}
+run: xcrun altool --upload-app --type ios --file ./ios/build/Suncairn.ipa --apiKey ${{ secrets.API_KEY }} --apiIssuer ${{ secrets.API_ISSUER }}
    
