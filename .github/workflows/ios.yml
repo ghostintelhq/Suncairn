@@ -19,7 +19,7 @@ on:
 -name: Install dependencies
 run: npm install
     -name: Install CocoaPods
-  run: | cd ios pod install cd ..
+run: | cd ios pod install cd ..
     -name: Build Archive
 run: | cd ios xcodebuild -workspace Suncairn.xcworkspace -scheme Suncairn -configuration Release -archivePath $PWD/build/Suncairn.xcarchive archive cd ..
     -name: Export IPA
